@@ -9,8 +9,30 @@ This project is a prototype chatbot that allows you to **ask questions about my 
 
 ---
 
-- **Phase 1.ipynb** → index PDF resume into Pinecone, test LLM query
-- **Phase 2.ipynb** → Gradio app to interact with the chatbot
+## Architecture
+
+The chatbot is implemented in **two phases**, using a simple RAG (Retrieval-Augmented Generation) pipeline:
+
+![Portfolio Chatbot Prototype Architecture](Victor%20Portfolio%20Chatbot%20Prototype%20Architecture.png)
+
+### Phase 1: Data Preparation & Indexing
+
+- The resume PDF (`Resume.pdf`) is loaded using `LangChain`'s PDF loader.
+- The text is split into **chunks** (overlapping text blocks).
+- Each chunk is embedded into a vector using `LlamaTextEmbedV2`.
+- The embeddings are stored in **Pinecone** (Vector Database), along with metadata.
+
+### Phase 2: RAG Pipeline
+
+- A user query is received via the **Gradio UI**.
+- The query is embedded and used to retrieve **top relevant chunks** from Pinecone.
+- A prompt is built by combining retrieved chunks + user query.
+- The prompt is sent to **HuggingFace Zephyr-7b-beta LLM**.
+- The LLM generates an answer, which is displayed in the Gradio UI.
+
+---
+
+This architecture allows the chatbot to **ground its answers based on real data** from my resume, making it more accurate and controllable.
 
 ---
 
